@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     Vector2 lastTapPos;
     UIManager uiManager;
+    Rigidbody playerRb;
+    float _speed = 2f;
 
     [SerializeField] private float dragSpeed = 5f;
 
@@ -15,11 +17,17 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         uiManager = UIManager.instance;
+        playerRb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        DragHandler();
+        //DragHandler();
+    }
+
+    private void FixedUpdate()
+    {
+        KeyboardMove();
     }
 
     void DragHandler()
@@ -56,33 +64,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void KeyboardMove()
     {
-        if (other.gameObject.CompareTag(Tags.lumberMillTriggerTag))
-        {
-            LumberMillManager lmManager = other.transform.parent.GetComponent<LumberMillManager>();
-            uiManager.AddWood(lmManager.stackedWood);
-            lmManager.StackWood(-lmManager.stackedWood);
-            lmManager.lmUI.SetActive(true);
-        }
-        if (other.gameObject.CompareTag(Tags.goldMakerTriggerTag))
-        {
-            GoldMakerManager gmManager = other.transform.parent.GetComponent<GoldMakerManager>();
-            gmManager.gmUI.SetActive(true);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag(Tags.lumberMillTriggerTag))
-        {
-            LumberMillManager lmManager = other.transform.parent.GetComponent<LumberMillManager>();
-            lmManager.lmUI.SetActive(false);
-        }
-        if (other.gameObject.CompareTag(Tags.goldMakerTriggerTag))
-        {
-            GoldMakerManager gmManager = other.transform.parent.GetComponent<GoldMakerManager>();
-            gmManager.gmUI.SetActive(false);
-        }
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        //playerRb.velocity = Vector3.forward.normalized * _speed * Time.fixedDeltaTime * 20;
+        Vector3 move = new Vector3(horizontal, 0, vertical);
+        playerRb.velocity = move * _speed * Time.fixedDeltaTime * 300;
     }
 }

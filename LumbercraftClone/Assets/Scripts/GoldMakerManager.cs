@@ -24,6 +24,13 @@ public class GoldMakerManager : MonoBehaviour
     int goldAmount2;
     int goldAmount3;
 
+    int level;
+    float levelMultiplier = 1;
+
+    [SerializeField] Button button1;
+    [SerializeField] Button button2;
+    [SerializeField] Button button3;
+
     private void Start()
     {
         uiManager = UIManager.instance;
@@ -41,6 +48,7 @@ public class GoldMakerManager : MonoBehaviour
         }
         uiManager.AddWood(-woodAmount1);
         uiManager.AddGold(goldAmount1);
+        button1.interactable = false;
     }
 
     public void Offer2()
@@ -52,6 +60,7 @@ public class GoldMakerManager : MonoBehaviour
         }
         uiManager.AddWood(-woodAmount2);
         uiManager.AddGold(goldAmount2);
+        button2.interactable = false;
     }
 
     public void Offer3()
@@ -63,10 +72,12 @@ public class GoldMakerManager : MonoBehaviour
         }
         uiManager.AddWood(-woodAmount3);
         uiManager.AddGold(goldAmount3);
+        button3.interactable = false;
     }
 
     IEnumerator GiveOffer1()
     {
+        button1.interactable = true;
         rate1 = Random.Range(1, 3);
         woodAmount1 = Random.Range(100, 200);
         goldAmount1 = woodAmount1 * rate1;
@@ -77,6 +88,7 @@ public class GoldMakerManager : MonoBehaviour
 
     IEnumerator GiveOffer2()
     {
+        button2.interactable = true;
         rate2 = Random.Range(1, 5);
         woodAmount2 = Random.Range(100, 200);
         goldAmount2 = woodAmount2 * rate2;
@@ -87,11 +99,17 @@ public class GoldMakerManager : MonoBehaviour
 
     IEnumerator GiveOffer3()
     {
+        button3.interactable = true;
         rate3 = Random.Range(1, 6);
         woodAmount3 = Random.Range(100, 200);
         goldAmount3 = woodAmount3 * rate3;
         button3Text.text = woodAmount3 + " Wood to " + goldAmount3 + " Gold";
         yield return new WaitForSeconds(10);
         StartCoroutine(GiveOffer3());
+    }
+
+    public void UpgradeGoldMaker()
+    {
+
     }
 }
